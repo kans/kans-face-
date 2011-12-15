@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    {% block styles %}
+      <link rel="stylesheet" href="/media/noCache/style.css" type="text/css">
+      <link rel="stylesheet" href="/media/css/table.css" type="text/css">
+    {% endblock %}
+      <link rel="shortcut icon" type="image/ico" href="/media/icons/favicon.ico" />
+    {% block scripts %}
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    {% endblock scripts %}
+    <title>{% block title %}kansface :o {% endblock %}</title>
+  </head>
+  <body>
+    {% block body %}
+      {% block header %}
+      {% endblock %}
+        <div id='content'>
+        </div>
+      {% block content %}
+      {% endblock content %}
+      <div id='footer'>
+        {% block footer %}
+        {% endblock footer %}
+      </div>
+    {% endblock body%}
+  </body>
+</html>
+
+
