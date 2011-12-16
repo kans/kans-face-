@@ -13,7 +13,7 @@ class GetRecentPosts(template.Node):
 
   def render(self, context):
     articles = models.Article.filter('-updated_at').values('slug')[:5]
-    return [a.to_href for a in articles]
+    return [a.url for a in articles]
 
   @staticmethod
   def get_recent_posts(number):
