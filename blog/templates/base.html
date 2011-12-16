@@ -3,10 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     {% block styles %}
-      <link rel="stylesheet" href="/media/noCache/style.css" type="text/css">
-      <link rel="stylesheet" href="/media/css/table.css" type="text/css">
+      <link rel="stylesheet" href="{% STATIC_URL %}/no-cache/blog.css" type="text/css">
     {% endblock %}
-      <link rel="shortcut icon" type="image/ico" href="/media/icons/favicon.ico" />
     {% block scripts %}
       <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
     {% endblock scripts %}
@@ -14,17 +12,26 @@
   </head>
   <body>
     {% block body %}
-      {% block header %}
-      {% endblock %}
-        <div id='content'>
+
+      {% include 'header.html' %}
+
+      <div id="content" class="content">
+
+        <div id="meat">
+          {% block meat %}
+          {% endblock %}
         </div>
-      {% block content %}
-      {% endblock content %}
-      <div id='footer'>
+
+        {% include "sidebar.html" %}
+
+      </div>
+
+      <div id="footer" class="content">
         {% block footer %}
         {% endblock footer %}
       </div>
-    {% endblock body%}
+
+    {% endblock body %}
   </body>
 </html>
 
