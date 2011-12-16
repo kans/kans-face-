@@ -1,0 +1,70 @@
+<IfDefine DEBUG>
+  WSGIRestrictStdin Off
+  WSGIRestrictStdout Off
+</IfDefine>
+
+NameVirtualHost *:80
+<VirtualHost *:80>
+        ServerAdmin mkaniaris@gmail.com
+        ServerName 97.107.141.92
+        <IfDefine !DEBUG>
+            WSGIDaemonProcess 97.107.141.92 processes=1 threads=2
+            WSGIProcessGroup 97.107.141.92
+        </IfDefine>
+
+        WSGIPassAuthorization On
+        DocumentRoot /home/git/kans-face/apache
+
+        Alias /media/ /home/git/kans-face/media/
+        <Directory /home/cloudfab/web>
+                Options Indexes FollowSymLinks
+                Order allow,deny
+                Allow from all
+        </Directory>
+
+        <Directory /home/git/kans-face/media/cache-short>
+                  Order allow,deny
+                  Allow from all
+                  Header set Cache-Control "max-age=600, public"
+                  Header set Pragma "cache"
+        </Directory>
+
+
+        <Directory /home/git/kans-face/media/cache-long>
+                  Order allow,deny
+                  Allow from all
+                  Header set Cache-Control "max-age=6000, public"
+                  Header set Pragma "cache"
+        </Directory>
+
+
+        <Directory /home/git/kans-face/media/no-cache>
+                  Order allow,deny
+                  Allow from all
+                  Header set Cache-Control "private, no-cache, proxy-revalidate, no-transform"
+                  Header set Pragma "no-cache"
+        </Directory>
+
+
+        Alias /adminMedia/ /var/www/djangoAdmin/
+        <Directory /var/www/djangoAdmin>
+                  Options Indexes FollowSymLinks
+                  Order allow,deny
+                  Allow from all
+        </Directory>
+
+        WSGIScriptAlias / /home/git/kans-face/apache/django.wsgi
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        ErrorLog /home/git/kans-face/logs/apache/errorlog.out
+        LogLevel error
+
+        CustomLog /home/git/kans-face/logs/apache/access.out combined
+        ServerSignature On
+
+        RewriteEngine On
+        RewriteCond %{HTTPS} off
+        RewriteRule (/admin) https://%{SERVER_NAME}:443%{REQUEST_URI}
+
+
+</VirtualHost>
