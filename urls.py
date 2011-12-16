@@ -7,8 +7,8 @@ from django.conf.urls.defaults import patterns, include
 # from django.contrib import admin
 # admin.autodiscover()
 
-import blog.urls
+from blog import urls as blogUrls
 
 urlpatterns = patterns('',
- (r'^$', include(blog.urls)),
+ (r'^$', include(blogUrls)),
 )

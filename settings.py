@@ -84,9 +84,6 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'kans_face.urls'
 
 TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
   "%s/blog/templates" % ROOT_DIR,
 )
 
@@ -98,7 +95,6 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-  # 'django.contrib.admin',
   )
 
 # A sample logging configuration. The only tangible logging
@@ -125,3 +121,8 @@ LOGGING = {
 }
 
 from secretSettings import *
+
+# person to email... is there a djanog builtin to do this?
+CONTACT = ""
+if MANAGERS:
+  CONTACT = MANAGERS[0][1]

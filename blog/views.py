@@ -9,6 +9,6 @@ def lookup_article(request, slug):
   article = get_object_or_404(models.Article, slug=slug)
   return render_to_response("article.html", {'article': article})
 
-def index(request):
+def splash(request):
   articles = models.Article.order_by('-created_on').values('slug', 'created_on', 'updated_on')
   return render_to_response("blog-index.html", {'articles': articles})
