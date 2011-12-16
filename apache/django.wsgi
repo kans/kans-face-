@@ -4,8 +4,10 @@ import sys
 os.environ['DJANGO_SETTINGS_MODULE']='settings'
 #os.environ["CELERY_LOADER"] = "django"
 
-import settings
-sys.path.append(settings.ROOT_DIR)
+#TODO: is this safe?
+path = os.path.abspath(__file__ + '/../..')
+if path not in sys.path:
+  sys.path.append(path)
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
