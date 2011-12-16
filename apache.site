@@ -56,10 +56,10 @@ NameVirtualHost *:80
         WSGIScriptAlias / /home/git/kans-face/apache/django.wsgi
 
         # Possible values include: debug, info, notice, warn, error, crit,
-        ErrorLog /home/git/kans-face/logs/apache/errorlog.out
+        ErrorLog /home/git/kans-face/logs/errorlog.out
         LogLevel error
 
-        CustomLog /home/git/kans-face/logs/apache/access.out combined
+        CustomLog /home/git/kans-face/logs/access.out combined
         ServerSignature On
 
         RewriteEngine On
