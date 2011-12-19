@@ -81,7 +81,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'kans_face.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
   "%s/blog/templates" % ROOT_DIR,

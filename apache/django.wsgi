@@ -5,7 +5,7 @@ os.environ['DJANGO_SETTINGS_MODULE']='settings'
 #os.environ["CELERY_LOADER"] = "django"
 
 #TODO: is this safe?
-# path = os.path.abspath(__file__ + '/../..')
+path = os.path.abspath(__file__ + '/../..')
 if path not in sys.path:
   sys.path.append(path)
 
