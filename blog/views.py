@@ -12,3 +12,7 @@ def lookup_article(request, slug):
 def splash(request):
   articles = models.Article.objects.order_by('-created_on').values('slug', 'created_on', 'updated_on')
   return render_to_response("blog-index.html", {'articles': articles})
+
+def archives(request):
+  articles = models.Article.objects.order_by('-created_on').values('slug', 'created_on', 'updated_on')
+  return render_to_response("archives.html", {'articles': articles})

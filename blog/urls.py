@@ -10,7 +10,7 @@ from django.conf.urls.defaults import patterns, include, url
 from blog import views
 
 urlpatterns = patterns('',
-
-  (r'^/(?P<slug>.*)/$', views.lookup_article),
+  (r'^archives$', views.archives),
   (r'^$', views.splash),
+  (r'^(?P<slug>.*)$', views.lookup_article),
 )

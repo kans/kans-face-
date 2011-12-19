@@ -96,7 +96,9 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'blog',
     'sentry',
+    'south',
     'raven.contrib.django',
+    'ckeditor',
   )
 
 # Enable sentry for logging- emailing will happen based on our own middleware
@@ -121,7 +123,33 @@ LOGGING = {
     }
 }
 
+CKEDITOR_MEDIA_PREFIX = '%s/no-cache/ckeditor/' % ( ROOT_DIR )
+CKEDITOR_UPLOAD_PATH = '%s/media/uploads' % ( ROOT_DIR )
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': [
+            [      'Undo', 'Redo',
+              '-', 'Bold', 'Italic', 'Underline',
+              '-', 'Link', 'Unlink', 'Anchor',
+              '-', 'Format',
+              '-', 'SpellChecker', 'Scayt',
+              '-', 'Maximize',
+            ],
+            [      'HorizontalRule',
+              '-', 'Table',
+              '-', 'BulletedList', 'NumberedList',
+              '-', 'Cut','Copy','Paste','PasteText','PasteFromWord',
+              '-', 'SpecialChar',
+              '-', 'Source',
+              '-', 'About',
+            ]
+        ],
+        'width': 1000,
+        'height': 300,
+        'toolbarCanCollapse': True,
+    }
+}
 from secretSettings import *
 
 # person to email... is there a djanog builtin to do this?

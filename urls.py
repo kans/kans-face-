@@ -11,5 +11,5 @@ from blog import urls as blogUrls
 
 urlpatterns = patterns('',
   (r'^sentry/', include('sentry.web.urls')),
-  (r'^$', include(blogUrls)),
+  (r'^', include(blogUrls)),
 )
