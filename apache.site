@@ -3,68 +3,73 @@
   WSGIRestrictStdout Off
 </IfDefine>
 
-NameVirtualHost *:80
-<VirtualHost *:80>
-        ServerAdmin mkaniaris@gmail.com
-        ServerName 97.107.141.92
-        <IfDefine !DEBUG>
-            WSGIDaemonProcess 97.107.141.92 processes=1 threads=2
-            WSGIProcessGroup 97.107.141.92
-        </IfDefine>
+<Macro Blog $dir>
+  NameVirtualHost *:80
+  <VirtualHost *:80>
+          ServerAdmin mkaniaris@gmail.com
+          ServerName kans-face
 
-        WSGIPassAuthorization On
-        DocumentRoot /home/git/kans-face/apache
+          <IfDefine !DEBUG>
+              WSGIDaemonProcess kans-face processes=2 threads=4
+              WSGIProcessGroup kans-face
+          </IfDefine>
 
-        Alias /media/ /home/git/kans-face/media/
-        <Directory /home/cloudfab/web>
-                Options Indexes FollowSymLinks
-                Order allow,deny
-                Allow from all
-        </Directory>
+          WSGIPassAuthorization On
+          DocumentRoot $dir/apache
 
-        <Directory /home/git/kans-face/media/cache-short>
-                  Order allow,deny
-                  Allow from all
-                  Header set Cache-Control "max-age=600, public"
-                  Header set Pragma "cache"
-        </Directory>
-
-
-        <Directory /home/git/kans-face/media/cache-long>
-                  Order allow,deny
-                  Allow from all
-                  Header set Cache-Control "max-age=6000, public"
-                  Header set Pragma "cache"
-        </Directory>
-
-
-        <Directory /home/git/kans-face/media/no-cache>
-                  Order allow,deny
-                  Allow from all
-                  Header set Cache-Control "private, no-cache, proxy-revalidate, no-transform"
-                  Header set Pragma "no-cache"
-        </Directory>
-
-
-        Alias /adminMedia/ /var/www/djangoAdmin/
-        <Directory /var/www/djangoAdmin>
+          Alias /media/ $dir/media/
+          <Directory $dir>
                   Options Indexes FollowSymLinks
                   Order allow,deny
                   Allow from all
-        </Directory>
+          </Directory>
 
-        WSGIScriptAlias / /home/git/kans-face/apache/django.wsgi
-
-        # Possible values include: debug, info, notice, warn, error, crit,
-        ErrorLog /home/git/kans-face/logs/errorlog.out
-        LogLevel error
-
-        CustomLog /home/git/kans-face/logs/access.out combined
-        ServerSignature On
-
-        RewriteEngine On
-        RewriteCond %{HTTPS} off
-        RewriteRule (/admin) https://%{SERVER_NAME}:443%{REQUEST_URI}
+          <Directory $dir/media/cache-short>
+                    Order allow,deny
+                    Allow from all
+                    Header set Cache-Control "max-age=600, public"
+                    Header set Pragma "cache"
+          </Directory>
 
 
-</VirtualHost>
+          <Directory $dir/media/cache-long>
+                    Order allow,deny
+                    Allow from all
+                    Header set Cache-Control "max-age=6000, public"
+                    Header set Pragma "cache"
+          </Directory>
+
+
+          <Directory $dir/media/no-cache>
+                    Order allow,deny
+                    Allow from all
+                    Header set Cache-Control "private, no-cache, proxy-revalidate, no-transform"
+                    Header set Pragma "no-cache"
+          </Directory>
+
+
+          Alias /adminMedia/ /var/www/djangoAdmin/
+          <Directory /var/www/djangoAdmin>
+                    Options Indexes FollowSymLinks
+                    Order allow,deny
+                    Allow from all
+          </Directory>
+
+          WSGIScriptAlias / $dir/apache/django.wsgi
+
+          # Possible values include: debug, info, notice, warn, error, crit,
+          ErrorLog $dir/logs/errorlog.out
+          LogLevel error
+
+          CustomLog $dir/logs/access.out combined
+          ServerSignature On
+
+          RewriteEngine On
+          RewriteCond %{HTTPS} off
+          RewriteRule (/admin) https://%{SERVER_NAME}:443%{REQUEST_URI}
+
+
+  </VirtualHost>
+</Macro>
+
+Use Blog /home/git/kans_face

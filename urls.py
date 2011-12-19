@@ -10,5 +10,6 @@ from django.conf.urls.defaults import patterns, include
 from blog import urls as blogUrls
 
 urlpatterns = patterns('',
- (r'^$', include(blogUrls)),
+  (r'^sentry/', include('sentry.web.urls')),
+  (r'^$', include(blogUrls)),
 )

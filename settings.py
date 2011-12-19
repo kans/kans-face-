@@ -1,6 +1,6 @@
 # Django settings for kans_face project.
 
-ROOT_DIR = '/home/git/kans-face'
+ROOT_DIR = '/home/git/kans_face'
 
 IS_MIGRATING = False
 DEBUG = True
@@ -95,30 +95,32 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
+    'sentry',
+    'raven.contrib.django',
   )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
+# Enable sentry for logging- emailing will happen based on our own middleware
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatter': { 'verbose':
+                   {'format': '%(asctime)s %(levelname)-8s [%(name)s] -- %(message)s'}
+                 },
     'handlers': {
-        'mail_admins': {
-            'level': 'ERROR',
-            'class': 'django.utils.log.AdminEmailHandler'
-        }
+        'sentry': {
+        'level': 'ERROR',
+        'class': 'sentry.client.handlers.SentryHandler',
+      }
     },
     'loggers': {
-        'django.request': {
-            'handlers': ['mail_admins'],
+        'senturian': {
+            'handlers': ['sentry'],
             'level': 'ERROR',
-            'propagate': True,
-        },
+      },
+
     }
 }
+
 
 from secretSettings import *
 
