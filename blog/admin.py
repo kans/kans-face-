@@ -1,0 +1,56 @@
+#!/usr/bin/python
+#Copyright 2011 Matt Kaniaris
+"""Django admin interface specification"""
+
+from django.contrib import admin
+from django import forms
+from django.utils.safestring import mark_safe
+from django.utils.html import escape
+
+class ModelLinkWidget(forms.HiddenInput):
+  """ Replaces drop down boxes with a link to the damn thing instead"""
+  def __init__(self, adminSite, originalObject):
+    self.adminSite = adminSite
+    self.originalObject = originalObject
+    super(ModelLinkWidget,self).__init__()
+
+  def render(self, name, value, attrs=None):
+    if not self.originalObject:
+      return "None?"
+
+    # pylint: disable = W0212
+    link = '/admin/%s/%s/%d' % ( self.originalObject._meta.app_label,
+                           self.originalObject._meta.module_name,
+                           self.originalObject.id)
+    return super(ModelLinkWidget, self).render(name, value, attrs) + \
+      mark_safe('<a href="%s">%s</a>' % (link, escape(unicode(self.originalObject))))
+
+
+class ModelLinkAdmin(admin.ModelAdmin):
+  """ Use me to replace drop down boxes of foreign keys to links to them:
+  add a model_link attr to the model to point the way
+  NOTE: you can not use model_link and readonly_fields!
+  """
+  date_hierarchy = 'created_at'
+  readonly_fields = ('updated_at', 'created_at', 'id')
+  model_link = ()
+
+  def __init__(self, *args, **kwargs):
+    conflict = set(self.readonly_fields).intersection(set(self.model_link))
+    assert not conflict, "Go remove '%s' from readonly_fields or model_links for %s" % (" ".join([x for x in conflict]), self.__class__.__name__)
+    super(ModelLinkAdmin, self).__init__(*args, **kwargs)
+
+  def get_form(self, request, obj=None):
+    form = super(ModelLinkAdmin, self).get_form(request, obj)
+
+    # bail if we are making a new object or if we dont' have a model link
+    if request.META['PATH_INFO'][-5:] == '/add/' or not hasattr(self, 'model_link'):
+      return form
+
+    for field_name in self.model_link:
+      if field_name in form.base_fields:
+        originalObject = getattr(obj, field_name, None)
+        form.base_fields[field_name].widget = ModelLinkWidget(self.admin_site, originalObject)
+        form.base_fields[field_name].required = False
+    return form
+

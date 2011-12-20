@@ -3,9 +3,8 @@
 
 from django.conf.urls.defaults import patterns, include
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
 
 from blog import urls as blogUrls
 
