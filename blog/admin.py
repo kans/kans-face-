@@ -33,9 +33,9 @@ class ModelLinkAdmin(admin.ModelAdmin):
   add a model_link attr to the model to point the way
   NOTE: you can not use model_link and readonly_fields!
   """
-  date_hierarchy = 'created_at'
-  readonly_fields = ('updated_at', 'created_at', 'id')
-  date_hierarchy = '-created_at'
+  date_hierarchy = 'created_on'
+  readonly_fields = ('updated_on', 'created_on', 'id')
+  date_hierarchy = 'created_on'
   model_link = ()
 
   def __init__(self, *args, **kwargs):
@@ -59,14 +59,14 @@ class ModelLinkAdmin(admin.ModelAdmin):
 
 class ArticleAdmin(ModelLinkAdmin):
   model_link = ( )
-  list_filter = ( 'created_at', 'is_live',  )
-  list_display = ( 'id', 'slug', 'is_live', 'created_at', 'date_published', 'title')
+  list_filter = ( 'created_on', 'is_live',  )
+  list_display = ( 'id', 'slug', 'is_live', 'created_on', 'date_published', 'title')
 
 admin.site.register(models.Article, ArticleAdmin)
 
 class CommentAdmin(ModelLinkAdmin):
   model_link = ('article', )
-  list_filter = ( 'article', 'created_at' )
-  list_display = ( 'id', 'created_at' )
+  list_filter = ( 'article', 'created_on' )
+  list_display = ( 'id', 'created_on' )
 
 admin.site.register(models.Comment, CommentAdmin)
