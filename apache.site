@@ -45,14 +45,6 @@
             Header set Pragma "no-cache"
   </Directory>
 
-
-  Alias /adminMedia/ /var/www/djangoAdmin/
-  <Directory /var/www/djangoAdmin>
-            Options Indexes FollowSymLinks
-            Order allow,deny
-            Allow from all
-  </Directory>
-
   WSGIScriptAlias / $dir/apache/django.wsgi
 
   # Possible values include: debug, info, notice, warn, error, crit,
