@@ -1,4 +1,4 @@
-
+{% load recent_posts %}
 
 <div id="sidebar">
   <h3>hewro, I'm matt</h3>
@@ -11,9 +11,11 @@
 
   <h3>recent stuffs</h3>
 
+  {% recent_stuffs 5 as stuffs %}
   <ul>
-
-
+    {% for stuff in stuffs %}
+      <li><a href="/{{ stuff.slug }}">{{ stuff.title|truncatewords:5 }}</a></li>
+    {% endfor %}
   </ul>
 
   <hr/>
