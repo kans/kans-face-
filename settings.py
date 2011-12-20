@@ -124,7 +124,7 @@ LOGGING = {
     }
 }
 
-CKEDITOR_MEDIA_PREFIX = '%s/no-cache/ckeditor/' % ( ROOT_DIR )
+CKEDITOR_MEDIA_PREFIX = '/media/no-cache/'
 CKEDITOR_UPLOAD_PATH = '%s/media/uploads' % ( ROOT_DIR )
 
 CKEDITOR_CONFIGS = {

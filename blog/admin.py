@@ -7,6 +7,8 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
+from ckeditor.widgets import CKEditorWidget
+
 from blog import models
 
 class ModelLinkWidget(forms.HiddenInput):
@@ -57,10 +59,18 @@ class ModelLinkAdmin(admin.ModelAdmin):
         form.base_fields[field_name].required = False
     return form
 
+class PostArticleForm(forms.ModelForm):
+  body = forms.CharField(widget=CKEditorWidget())
+
+  class Meta:
+    model = models.Article
+
+
 class ArticleAdmin(ModelLinkAdmin):
   model_link = ( )
   list_filter = ( 'created_on', 'is_live',  )
   list_display = ( 'id', 'slug', 'is_live', 'created_on', 'date_published', 'title')
+  form = PostArticleForm
 
 admin.site.register(models.Article, ArticleAdmin)
 

@@ -8,6 +8,7 @@ admin.autodiscover()
 from blog import urls as blogUrls
 
 urlpatterns = patterns('',
+  (r'^ckeditor/', include('ckeditor.urls')),
   (r'^sentry/', include('sentry.web.urls')),
   (r'^admin/', include(admin.site.urls)),
   (r'^', include(blogUrls)),
