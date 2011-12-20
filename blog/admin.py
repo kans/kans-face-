@@ -7,6 +7,8 @@ from django import forms
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
+from blog import models
+
 class ModelLinkWidget(forms.HiddenInput):
   """ Replaces drop down boxes with a link to the damn thing instead"""
   def __init__(self, adminSite, originalObject):
@@ -33,6 +35,7 @@ class ModelLinkAdmin(admin.ModelAdmin):
   """
   date_hierarchy = 'created_at'
   readonly_fields = ('updated_at', 'created_at', 'id')
+  date_hierarchy = '-created_at'
   model_link = ()
 
   def __init__(self, *args, **kwargs):
@@ -54,3 +57,16 @@ class ModelLinkAdmin(admin.ModelAdmin):
         form.base_fields[field_name].required = False
     return form
 
+class ArticleAdmin(ModelLinkAdmin):
+  model_link = ( )
+  list_filter = ( 'created_at', 'is_live',  )
+  list_display = ( 'id', 'slug', 'is_live', 'created_at', 'date_published', 'title')
+
+admin.site.register(models.Article, ArticleAdmin)
+
+class CommentAdmin(ModelLinkAdmin):
+  model_link = ('article', )
+  list_filter = ( 'article', 'created_at' )
+  list_display = ( 'id', 'created_at' )
+
+admin.site.register(models.Comment, CommentAdmin)
