@@ -51,7 +51,7 @@ STATIC_URL = '/media/'
 # URL prefix for admin static files -- CSS, JavaScript and images.
 # Make sure to use a trailing slash.
 # Examples: "http://foo.com/static/admin/", "/static/admin/".
-ADMIN_MEDIA_PREFIX = '/media/admin/'
+ADMIN_MEDIA_PREFIX = '%sadmin/' % ( STATIC_URL)
 
 # Additional locations of static files
 STATICFILES_DIRS = (
@@ -124,8 +124,8 @@ LOGGING = {
     }
 }
 
-CKEDITOR_MEDIA_PREFIX = '/media/no-cache/'
-CKEDITOR_UPLOAD_PATH = '%s/media/uploads' % ( ROOT_DIR )
+CKEDITOR_MEDIA_PREFIX = '%sno-cache/' % ( STATIC_URL )
+CKEDITOR_UPLOAD_PATH = '%s%suploads' % ( ROOT_DIR, STATIC_URL )
 
 CKEDITOR_CONFIGS = {
     'default': {
