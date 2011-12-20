@@ -12,14 +12,24 @@ def lookup_article(request, slug):
 def splash(request):
   articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'updated_on')
   return render_to_response("blog-index.html", {'articles': articles})
+class _article(object):
+  def __init__(self, slug, created_on, title):
+    self.created_on = created_on
+    self.slug = slug
+    self.title = title
+
+  def render_time(self):
+    return self.created_on.strftime('%b %d')
 
 def archives(request):
   """ returns a page renderning links to all posts ever """
   # its easier to maintain some app level sql sorting than making a monster query I think?
-  articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'date_published', 'updated_on')
+  articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'title')
   dates = {}
   for article in articles:
-    if article.date_published.year not in dates:
-      dates[article.date_published.year] = []
+    time = article['created_on']
+    year = time.year
+    dates.setdefault(year, [])
+    dates[year].append(_article(**article))
 
-  return render_to_response("archives.html", {'articles': articles})
+  return render_to_response("archives.html", {'dates': dates})

@@ -1,7 +1,13 @@
 {% extends 'base.html' %}
 
+<h1>Brog Archive</h1>
 {% block meat %}
-  {% for article in articles %}
-
+  {% for year,articles in dates.items %}
+    <div class="blog-year">
+      <h2> {{ year }} </h2>
+      {% for article in articles %}
+        <p>{{ article.render_date }} <a href="{% url blog.views.lookup_article slug=article.slug %}">{{ article.title }}</a></p>
+      {% endfor %}
+    </div>
   {% endfor %}
 {% endblock meat %}
