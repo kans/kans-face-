@@ -18,7 +18,7 @@ class _article(object):
     self.slug = slug
     self.title = title
 
-  def render_time(self):
+  def time(self):
     return self.created_on.strftime('%b %d')
 
 def archives(request):
