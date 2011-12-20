@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+
+{% block meat %}
+<h3> {{ article.title|safe }}</h3>
+
+{{ article.body|safe }}
+{% endblock meat %}
