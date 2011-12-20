@@ -2,8 +2,9 @@
 #Copyright 2011 Matt Kaniaris
 """Django admin interface specification"""
 
-from django.contrib import admin
 from django import forms
+from django.contrib import admin
+from django.core import urlresolvers
 from django.utils.safestring import mark_safe
 from django.utils.html import escape
 
@@ -23,9 +24,9 @@ class ModelLinkWidget(forms.HiddenInput):
       return "None?"
 
     # pylint: disable = W0212
-    link = '/admin/%s/%s/%d' % ( self.originalObject._meta.app_label,
-                           self.originalObject._meta.module_name,
-                           self.originalObject.id)
+    link = urlresolvers.reverse('admin:%s_%s_change' % (self.originalObject._meta.app_label, self.originalObject._meta.module_name),
+                         args=(self.originalObject.id,))
+
     return super(ModelLinkWidget, self).render(name, value, attrs) + \
       mark_safe('<a href="%s">%s</a>' % (link, escape(unicode(self.originalObject))))
 
@@ -65,18 +66,17 @@ class PostArticleForm(forms.ModelForm):
   class Meta:
     model = models.Article
 
-
 class ArticleAdmin(ModelLinkAdmin):
   model_link = ( )
   list_filter = ( 'created_on', 'is_live',  )
-  list_display = ( 'id', 'slug', 'is_live', 'created_on', 'date_published', 'title')
+  list_display = ( 'id', 'slug', 'is_live', 'created_on', 'title')
   form = PostArticleForm
 
 admin.site.register(models.Article, ArticleAdmin)
 
 class CommentAdmin(ModelLinkAdmin):
   model_link = ('article', )
-  list_filter = ( 'article', 'created_on' )
-  list_display = ( 'id', 'created_on' )
+  list_filter = ( 'article', 'created_on', 'user')
+  list_display = ( 'id', 'created_on', 'user' )
 
 admin.site.register(models.Comment, CommentAdmin)

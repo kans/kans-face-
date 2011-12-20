@@ -4,6 +4,12 @@ from django.db import models
 
 import settings
 
+class SafeForeignKey(models.ForeignKey):
+  """ON DELETE CASCADE is a horrible default.  Better to error than nuke things unexpectedly."""
+  def __init__(self, *args, **kwargs):
+    kwargs.setdefault('on_delete', models.PROTECT)
+    super(SafeForeignKey, self).__init__(*args, **kwargs)
+
 class DebugDateTimeField(models.DateTimeField):
   """Set DEBUG_TIME to the time you want to use for auto_now and
   auto_now_add fields when creating debug data"""
