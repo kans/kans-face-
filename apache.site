@@ -3,73 +3,86 @@
   WSGIRestrictStdout Off
 </IfDefine>
 
-<Macro Blog $dir>
-  NameVirtualHost *:80
-  <VirtualHost *:80>
-          ServerAdmin mkaniaris@gmail.com
-          ServerName kans-face
+<Macro Blog $dir $logQualifier>
+  ServerAdmin mkaniaris@gmail.com
+  ServerName kans-face
 
-          <IfDefine !DEBUG>
-              WSGIDaemonProcess kans-face processes=2 threads=4
-              WSGIProcessGroup kans-face
-          </IfDefine>
+  <IfDefine !DEBUG>
+      WSGIDaemonProcess kans-face-$logQualifier processes=2 threads=4
+      WSGIProcessGroup kans-face-$logQualifier
+  </IfDefine>
 
-          WSGIPassAuthorization On
-          DocumentRoot $dir/apache
+  WSGIPassAuthorization On
+  DocumentRoot $dir/apache
 
-          Alias /media/ $dir/media/
-          <Directory $dir>
-                  Options Indexes FollowSymLinks
-                  Order allow,deny
-                  Allow from all
-          </Directory>
+  Alias /media/ $dir/media/
+  <Directory $dir>
+          Options Indexes FollowSymLinks
+          Order allow,deny
+          Allow from all
+  </Directory>
 
-          <Directory $dir/media/cache-short>
-                    Order allow,deny
-                    Allow from all
-                    Header set Cache-Control "max-age=600, public"
-                    Header set Pragma "cache"
-          </Directory>
+  <Directory $dir/media/cache-short>
+            Order allow,deny
+            Allow from all
+            Header set Cache-Control "max-age=600, public"
+            Header set Pragma "cache"
+  </Directory>
 
 
-          <Directory $dir/media/cache-long>
-                    Order allow,deny
-                    Allow from all
-                    Header set Cache-Control "max-age=6000, public"
-                    Header set Pragma "cache"
-          </Directory>
+  <Directory $dir/media/cache-long>
+            Order allow,deny
+            Allow from all
+            Header set Cache-Control "max-age=6000, public"
+            Header set Pragma "cache"
+  </Directory>
 
 
-          <Directory $dir/media/no-cache>
-                    Order allow,deny
-                    Allow from all
-                    Header set Cache-Control "private, no-cache, proxy-revalidate, no-transform"
-                    Header set Pragma "no-cache"
-          </Directory>
+  <Directory $dir/media/no-cache>
+            Order allow,deny
+            Allow from all
+            Header set Cache-Control "private, no-cache, proxy-revalidate, no-transform"
+            Header set Pragma "no-cache"
+  </Directory>
 
 
-          Alias /adminMedia/ /var/www/djangoAdmin/
-          <Directory /var/www/djangoAdmin>
-                    Options Indexes FollowSymLinks
-                    Order allow,deny
-                    Allow from all
-          </Directory>
+  Alias /adminMedia/ /var/www/djangoAdmin/
+  <Directory /var/www/djangoAdmin>
+            Options Indexes FollowSymLinks
+            Order allow,deny
+            Allow from all
+  </Directory>
 
-          WSGIScriptAlias / $dir/apache/django.wsgi
+  WSGIScriptAlias / $dir/apache/django.wsgi
 
-          # Possible values include: debug, info, notice, warn, error, crit,
-          ErrorLog $dir/logs/errorlog.out
-          LogLevel error
+  # Possible values include: debug, info, notice, warn, error, crit,
+  ErrorLog $dir/logs/error-$logQualifier.out
+  LogLevel error
 
-          CustomLog $dir/logs/access.out combined
-          ServerSignature On
-
-          RewriteEngine On
-          RewriteCond %{HTTPS} off
-          RewriteRule (/admin) https://%{SERVER_NAME}:443%{REQUEST_URI}
-
-
-  </VirtualHost>
+  CustomLog $dir/logs/access-$logQualifier.out combined
+  ServerSignature On
 </Macro>
 
-Use Blog /home/git/kans_face
+NameVirtualHost *:80
+<VirtualHost *:80>
+             Use Blog /home/git/kans_face unsecure
+             RewriteEngine On
+             RewriteCond %{HTTPS} off
+             RewriteRule (/admin) https://%{SERVER_NAME}:443%{REQUEST_URI}
+</VirtualHost>
+
+NameVirtualHost *:443
+<VirtualHost *:443>
+             Use Blog /home/git/kans_face secure
+
+             SSLEngine On
+             SSLCertificateFile /etc/apache2/keys/test_server.crt
+             SSLCertificateKeyFile /etc/apache2/keys/test_server.key
+
+             SSLProtocol all -SSLv2
+             SSLCipherSuite ALL:!ADH:!EXPORT:!SSLv2:RC4+RSA:+HIGH:+MEDIUM
+             SSLCertificateChainFile /etc/apache2/keys/test_server.sub.class1.server.ca.pem
+             SSLCACertificateFile /etc/apache2/keys/test_server.ca.pem
+             SetEnvIf User-Agent ".*MSIE.*" nokeepalive ssl-unclean-shutdown
+
+</VirtualHost>
