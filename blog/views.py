@@ -16,11 +16,11 @@ def lookup_article(request, slug):
 def splash(request):
   articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'updated_on')
   return render_to_response("blog-index.html", {'articles': articles})
+
 class _article(object):
-  def __init__(self, slug, created_on, title):
-    self.created_on = created_on
-    self.slug = slug
-    self.title = title
+  def __init__(self, **kwargs):
+    for key,value in kwargs.items():
+      setattr(self, key, value)
 
   def time(self):
     return self.created_on.strftime('%b %d')

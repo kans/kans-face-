@@ -21,6 +21,9 @@ class Article(baseModels.BaseModel):
   def url(self):
     return self.get_absolute_url()
 
+  class Meta:
+    app_label = 'blog'
+
 class Comment(baseModels.BaseModel):
   """ a comment on an Article """
   body = models.TextField(help_text="the comment...")

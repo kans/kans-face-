@@ -9,6 +9,6 @@ urlpatterns = patterns('',
   (r'^ckeditor/', include('ckeditor.urls')),
   (r'^archives$', views.archives),
   (r'^$', views.splash),
-  (r'^(?P<slug>.*)$', views.lookup_article),
   (r'^comments/', include('django.contrib.comments.urls')),
+  (r'^post/(?P<slug>.*)$', views.lookup_article),
 )
