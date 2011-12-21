@@ -45,8 +45,15 @@ body{
     padding-right: 50px;
 }
 #sidebar{
-    width: 260px;
+    width: 230px;
     float: left;
+    padding: 15px;
+}
+#sidebar hr{
+    margin: 15px 0;
+    }
+#sidebar h3{
+    margin: 15px 0;
 }
 #sidebar > ul{
     display: block;
@@ -54,14 +61,18 @@ body{
     padding: 0;
 }
 #sidebar > ul > li{
-    display: inline;
-    margin-left: 0;
-    padding-left: 0;
+    display: block;
+    list-style: none;
+    padding: 10px 0;
+}
+#sidebar > ul > li + li{
+    border-top: 1px dotted #ddd;
 }
 #meat{
     float: left;
     width: 940px;
 }
+
 a:link{
     text-decoration: underline;
     color: #ff0000;
