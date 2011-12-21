@@ -1,7 +1,33 @@
 {% extends 'base.html' %}
 
-{% block meat %}
-<h3> {{ article.title|safe }}</h3>
+{% load comments %}
 
-{{ article.body|safe }}
+{% block scripts %}
+  {{ block.super }}
+  <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+{% endblock %}
+
+{% block meat %}
+  <h3> {{ article.title|safe }}</h3>
+
+  {{ article.body|safe }}
+
+  {% render_comment_list for article %}
+  {% get_comment_form for article as form %}
+
+  <form action="{% comment_form_target %}" method="post">
+    <table>
+    {% csrf_token %}
+     {{ form }}
+     <tr>
+       <td colspan="2">
+         <input type="submit" name="submit" value="Post">
+         <input type="submit" name="preview" value="Preview">
+       </td>
+     </tr>
+    </table>
+    <input type="hidden" name="next" value="{% url blog.views.lookup_article slug=article.slug %}" />
+   </form>
+
+
 {% endblock meat %}

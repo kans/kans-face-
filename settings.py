@@ -6,6 +6,8 @@ IS_MIGRATING = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
+RECAPTCHA_PUBLIC = '6LeJbMsSAAAAAHLMnjV_xIHqGXtsN6SUA9blItj_'
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -95,6 +97,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
+    'django.contrib.comments',
     'blog',
     'sentry',
     'south',

@@ -10,4 +10,5 @@ urlpatterns = patterns('',
   (r'^archives$', views.archives),
   (r'^$', views.splash),
   (r'^(?P<slug>.*)$', views.lookup_article),
+  (r'^comments/', include('django.contrib.comments.urls')),
 )
