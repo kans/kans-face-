@@ -12,22 +12,7 @@
 
   {{ article.body|safe }}
 
+  <h3>Comments:</h3>
   {% render_comment_list for article %}
-  {% get_comment_form for article as form %}
-
-  <form action="{% comment_form_target %}" method="post">
-    <table>
-    {% csrf_token %}
-     {{ form }}
-     <tr>
-       <td colspan="2">
-         <input type="submit" name="submit" value="Post">
-         <input type="submit" name="preview" value="Preview">
-       </td>
-     </tr>
-    </table>
-    <input type="hidden" name="next" value="{% url blog.views.lookup_article slug=article.slug %}" />
-   </form>
-
 
 {% endblock meat %}

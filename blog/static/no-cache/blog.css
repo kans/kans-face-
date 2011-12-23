@@ -73,6 +73,9 @@ body{
     width: 940px;
 }
 
+#comment-form table{
+    text-align: left;
+}
 a:link{
     text-decoration: underline;
     color: #ff0000;

@@ -3,15 +3,12 @@
 
 from django.core.context_processors import csrf
 from django.shortcuts import get_object_or_404, render_to_response
-
+from django.template.loader import render_to_string
 from blog import models
 
 def lookup_article(request, slug):
   article = get_object_or_404(models.Article, slug=slug, is_live=True)
-  context = {}
-  context.update(csrf(request))
-  context.update(article=article)
-  return render_to_response("article.html", context)
+  return render_to_response("article.html", {'article': article})
 
 def splash(request):
   articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'updated_on')
@@ -37,3 +34,12 @@ def archives(request):
     dates[year].append(_article(**article))
 
   return render_to_response("archives.html", {'dates': dates})
+
+def ajax_comment(request, articleID):
+  article = get_object_or_404(models.Article, id=articleID, is_live=True)
+  context = {}
+  context.update(csrf(request))
+  context.update(article=article)
+  return render_to_string("comment-form.html", context)
+
+
