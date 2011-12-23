@@ -1,0 +1,17 @@
+{% load comments %}
+
+{% get_comment_form for article as form %}
+
+<form action="{% comment_form_target %}" method="post" id="comment-form">
+  <table>
+  {% csrf_token %}
+   {{ form.as_table }}
+   <tr>
+     <td colspan="2">
+       <input type="submit" name="submit" value="Post">
+       <input type="submit" name="preview" value="Preview">
+     </td>
+   </tr>
+  </table>
+  <input type="hidden" name="next" value="{% url blog.views.lookup_article slug=article.slug %}" />
+ </form>
