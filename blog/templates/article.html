@@ -24,7 +24,7 @@
   <h3>Comments:</h3>
   {% render_comment_list for article %}
 
-  <a id="post-a-comment" href="{% url blog.views.ajax_comment article.id %}?KeepThis=true&TB_iframe=true&height=300&width=300" title="Add a Comment" class="thickbox">
+  <a id="post-a-comment" href="{% url blog.views.ajax_comment article.id %}?KeepThis=true&TB_iframe=true&height=400&width=600" title="Add a Comment" class="thickbox">
     Post a Comment
   </a>
 {% endblock meat %}
