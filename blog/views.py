@@ -2,6 +2,7 @@
 #Copyright 2011 Matt Kaniaris
 
 from django.core.context_processors import csrf
+from django.views.decorators.csrf import csrf_protect
 from django.shortcuts import get_object_or_404, render_to_response
 from django.template.loader import render_to_string
 from blog import models
@@ -35,11 +36,12 @@ def archives(request):
 
   return render_to_response("archives.html", {'dates': dates})
 
+@csrf_protect
 def ajax_comment(request, articleID):
   article = get_object_or_404(models.Article, id=articleID, is_live=True)
   context = {}
   context.update(csrf(request))
   context.update(article=article)
-  return render_to_string("comment-form.html", context)
+  return render_to_response("comment-form.html", context)
 
 
