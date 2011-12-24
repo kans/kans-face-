@@ -3,6 +3,23 @@ body{
     font-family: "PT Serif", "Serif";
     font-size: 1.2em;
 }
+
+h3{
+    font-size: 1.6em;
+    padding: 10px 0;
+}
+dl{
+    padding: 5px 0;
+}
+dt{
+    margin: 10px 0;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+dd{
+    margin: 10px 0;
+    padding-left: 10px;
+}
 #header > h1{
     font-size: 2.2em;
 }
@@ -82,7 +99,6 @@ body{
     -webkit-border-radius: 8px;
     -khtml-border-radius: 8px;
     border-radius: 8px;
-    display: inline;
     padding: 10px;
     cursor: pointer;
 }
