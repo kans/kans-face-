@@ -1,0 +1,21 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    {% block styles %}
+      <link rel="stylesheet" href="{% get_static_prefix %}cache-long/reset.css" type="text/css">
+    {% endblock %}
+    {% block scripts %}
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    {% endblock scripts %}
+    <title>{% block title %}kansface :o {% endblock %}</title>
+  </head>
+  <body>
+    {% block body %}
+    {% endblock body %}
+  </body>
+</html>
+
+

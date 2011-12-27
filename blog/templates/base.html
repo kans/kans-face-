@@ -1,42 +1,33 @@
+{% extends 'clean-base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    {% block styles %}
-      <link rel="stylesheet" href="{% get_static_prefix %}cache-long/reset.css" type="text/css">
-      <link rel="stylesheet" href="{% get_static_prefix %}no-cache/blog.css" type="text/css">
-    {% endblock %}
-    {% block scripts %}
-      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
-    {% endblock scripts %}
-    <title>{% block title %}kansface :o {% endblock %}</title>
-  </head>
-  <body>
-    {% block body %}
+{% block styles %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% get_static_prefix %}no-cache/blog.css" type="text/css">
+{% endblock %}
 
-      {% include 'header.html' %}
+{% block body %}
 
-      <div id="content" class="content">
+  {% include 'header.html' %}
 
-        <div id="meat">
-          {% block meat %}
-            <br/>
-          {% endblock %}
-        </div>
+  <div id="content" class="content">
 
-        {% include "sidebar.html" %}
+    <div id="meat">
+      {% block meat %}
+        <br/>
+      {% endblock %}
+    </div>
 
-      </div>
+    {% include "sidebar.html" %}
 
-      <div id="footer" class="content">
-        {% block footer %}
-        {% endblock footer %}
-      </div>
+  </div>
 
-    {% endblock body %}
-  </body>
-</html>
+  <div id="footer" class="content">
+    {% block footer %}
+    {% endblock footer %}
+  </div>
+
+{% endblock body %}
+
 
 

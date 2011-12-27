@@ -2,6 +2,10 @@
 
 {% load comments %}
 
+{% block scripts %}
+
+{% endblock %}
+
 {% block body %}
 <form action="{% comment_form_target %}" method="post" id="comment-form">
   <table>
@@ -16,5 +20,6 @@
    </tr>
   </table>
   <input type="hidden" name="next" value="{% url blog.views.lookup_article slug=article.slug %}" />
+
  </form>
 {% endblock %}
