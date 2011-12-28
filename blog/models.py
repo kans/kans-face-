@@ -24,9 +24,4 @@ class Article(baseModels.BaseModel):
   class Meta:
     app_label = 'blog'
 
-class Comment(baseModels.BaseModel):
-  """ a comment on an Article """
-  body = models.TextField(help_text="the comment...")
-  article = baseModels.SafeForeignKey(Article)
-  user = baseModels.SafeForeignKey(authModels.User)
 

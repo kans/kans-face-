@@ -74,9 +74,3 @@ class ArticleAdmin(ModelLinkAdmin):
 
 admin.site.register(models.Article, ArticleAdmin)
 
-class CommentAdmin(ModelLinkAdmin):
-  model_link = ('article', )
-  list_filter = ( 'article', 'created_on', 'user')
-  list_display = ( 'id', 'created_on', 'user' )
-
-admin.site.register(models.Comment, CommentAdmin)
