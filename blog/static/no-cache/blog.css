@@ -6,8 +6,12 @@ body{
 
 h3{
     font-size: 1.6em;
-    padding: 10px 0;
+    padding: 20px 0;
 }
+h2{
+    font-size: 1.4em;
+    padding: 10px 0;
+    }
 dl{
     padding: 5px 0;
 }
@@ -20,6 +24,10 @@ dd{
     margin: 10px 0;
     padding-left: 10px;
 }
+
+#header{
+    padding: 20px 0;
+}
 #header > h1{
     font-size: 2.2em;
 }
@@ -30,6 +38,9 @@ dd{
 }
 #nav{
     font-size: 1.1em;
+    padding: 10px 0 30px 0;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
 }
 #nav > ul{
     display: block;
@@ -48,7 +59,7 @@ dd{
     padding-left: 0;
 }
 #nav > ul > li + li {
-    border-left: 1px solid #333;
+    border-left: 1px dotted #333;
 }
 #nav a{
     font-decoration: none;
@@ -62,15 +73,19 @@ dd{
     padding-right: 50px;
 }
 #sidebar{
-    width: 230px;
+    width: 228px;
     float: left;
     padding: 15px;
+    padding-top: 0;
+    border: 1px solid;
+    border-top: 0;
+
 }
 #sidebar hr{
-    margin: 15px 0;
-    }
-#sidebar h3{
-    margin: 15px 0;
+    margin: 15px -15px;
+}
+#sidebar p:first-of-type{
+    text-align: justify;
 }
 #sidebar > ul{
     display: block;
@@ -80,10 +95,10 @@ dd{
 #sidebar > ul > li{
     display: block;
     list-style: none;
-    padding: 10px 0;
+    padding: 13px 0;
 }
 #sidebar > ul > li + li{
-    border-top: 1px dotted #ddd;
+    border-top: 1px dotted #333;
 }
 #meat{
     float: left;
@@ -109,4 +124,9 @@ a:link{
 }
 a:visited{
     color: #ff0000;
+}
+#blog-header{
+    padding: 20px 0;
+    font-size: 2em;
+    font-weight: bold;
 }

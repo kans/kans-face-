@@ -13,8 +13,8 @@
       $("#modal-iframe-container").dialog({
                autoOpen: false,
                modal: true,
-               height: 700,
-               width: 500
+               height: 500,
+               width: 800
       });
 
       $("#post-a-comment").click(function(){
@@ -31,17 +31,19 @@
 {% block styles %}
   {{ block.super }}
   <link rel="stylesheet" href="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.css" type="text/css">
-
 {% endblock %}
 
 {% block meat %}
-  <h3> {{ article.title|safe }}</h3>
+  <h3 id="blog-header"> {{ article.title|safe }}</h3>
 
   {{ article.body|safe }}
 
-  <h3>Comments: {{ perms.comment.can_delete }} </h3>
+  <h3>Comments: </h3>
 
   <dl id="comments">
+  {% comment %}
+    {{ perms }} isn't passed to the auto included template ... so I inlined list.html instead
+  {% endcomment %}
   {% get_comment_list for article as comment_list %}
   {% for comment in comment_list %}
     <dt id="c{{ comment.id }}">
