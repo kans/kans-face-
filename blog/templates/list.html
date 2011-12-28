@@ -1,7 +1,11 @@
 <dl id="comments">
   {% for comment in comment_list %}
     <dt id="c{{ comment.id }}">
+
         {{ comment.submit_date }} - {{ comment.name }}
+        {% if perms.comment.can_delete or perms.can_moderate_comments %}
+          <a href="{% url comments-delete comment.id %}?next="{% url blog.views.ajax_comment article.id %}">delete</a>
+        {% endif %}
     </dt>
     <dd>
         <p>{{ comment.comment }}</p>

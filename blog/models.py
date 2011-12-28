@@ -15,7 +15,7 @@ class Article(baseModels.BaseModel):
 
   @models.permalink
   def get_absolute_url(self):
-    return ('lookup_article', (), {'slug': self.slug})
+    return ('lookup-article', (), {'slug': self.slug})
 
   @property
   def url(self):

@@ -39,8 +39,22 @@
 
   {{ article.body|safe }}
 
-  <h3>Comments:</h3>
-  {% render_comment_list for article %}
+  <h3>Comments: {{ perms.comment.can_delete }} </h3>
+
+  <dl id="comments">
+  {% get_comment_list for article as comment_list %}
+  {% for comment in comment_list %}
+    <dt id="c{{ comment.id }}">
+        {{ comment.submit_date }} - {{ comment.name }}
+        {% if perms.comment.can_delete or perms.can_moderate_comments %}
+          <a href="{% url comments-delete comment.id %}?next={{ article.url }}">delete</a>
+        {% endif %}
+    </dt>
+    <dd>
+        <p>{{ comment.comment }}</p>
+    </dd>
+  {% endfor %}
+  </dl>
 
   <div id="modal-iframe-container" style="display: none;" title="Post a Comment">
   </div>
