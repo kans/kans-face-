@@ -13,7 +13,7 @@ class GetRecentPosts(template.Node):
     self.contextName = contextName
 
   def render(self, context):
-    context[self.contextName] =  models.Article.objects.filter(is_live=True).order_by('-updated_on').values('title', 'slug')[:5]
+    context[self.contextName] =  models.Article.objects.filter(is_live=True).order_by('-updated_on')[:5]
     return ""
 
   @staticmethod

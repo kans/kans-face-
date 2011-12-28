@@ -14,7 +14,7 @@
   {% recent_stuffs 5 as stuffs %}
   <ul>
     {% for stuff in stuffs %}
-      <li><a href="/{{ stuff.slug }}">{{ stuff.title|truncatewords:5 }}</a></li>
+      <li><a href="{{ stuff.url }}">{{ stuff.title|truncatewords:5 }}</a></li>
     {% endfor %}
   </ul>
 

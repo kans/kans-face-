@@ -3,13 +3,32 @@
 {% load comments %}
 {% load static %}
 
+{% block styles %}
+  <link rel="stylesheet" href="{% get_static_prefix %}cache-long/google-code-prettify/prettify.css" type="text/css" />
+  {{ block.super }}
+  <link rel="stylesheet" href="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.css" type="text/css" />
+
+{% endblock %}
+
 {% block scripts %}
   {{ block.super }}
   <script type="text/javascript" src="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.min.js"></script>
+  <script type="text/javascript" src="{% get_static_prefix %}cache-long/google-code-prettify/prettify.js"></script>
   <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   <script type="text/javascript">
 
   $(document).ready(function(){
+      var runPrettyPrint = false;
+      $("#blog-post pre").each(function(){
+          if (!$(this).hasClass("prettyprint") && !$(this).hasClass("nocode")){
+              $(this).addClass("prettyprint lang-py");
+              runPrettyPrint = true
+          }
+      });
+      if (runPrettyPrint){
+        prettyPrint();
+      }
+
       $("#modal-iframe-container").dialog({
                autoOpen: false,
                modal: true,
@@ -28,42 +47,39 @@
   </script>
 {% endblock %}
 
-{% block styles %}
-  {{ block.super }}
-  <link rel="stylesheet" href="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.css" type="text/css">
-{% endblock %}
-
 {% block meat %}
-  <h3 id="blog-header"> {{ article.title|safe }}</h3>
+  <div id="blog-post">
+    <h3> {{ article.title|safe }}</h3>
 
-  {{ article.body|safe }}
+    {{ article.body|safe }}
 
-  <h3>Comments: </h3>
+    <h3 id="start-comments">Comments: </h3>
 
-  <dl id="comments">
-  {% comment %}
-    {{ perms }} isn't passed to the auto included template ... so I inlined list.html instead
-  {% endcomment %}
-  {% get_comment_list for article as comment_list %}
-  {% for comment in comment_list %}
-    <dt id="c{{ comment.id }}">
-        {{ comment.submit_date }} - {{ comment.name }}
-        {% if perms.comment.can_delete or perms.can_moderate_comments %}
-          <a href="{% url comments-delete comment.id %}?next={{ article.url }}">delete</a>
-        {% endif %}
-    </dt>
-    <dd>
-        <p>{{ comment.comment }}</p>
-    </dd>
-  {% endfor %}
-  </dl>
+    <dl id="comments">
+    {% comment %}
+      {{ perms }} isn't passed to the auto included template ... so I inlined list.html instead
+    {% endcomment %}
+    {% get_comment_list for article as comment_list %}
+    {% for comment in comment_list %}
+      <dt id="c{{ comment.id }}">
+          {{ comment.submit_date }} - {{ comment.name }}
+          {% if perms.comment.can_delete or perms.can_moderate_comments %}
+            <a href="{% url comments-delete comment.id %}?next={{ article.url }}">delete</a>
+          {% endif %}
+      </dt>
+      <dd>
+          <p>{{ comment.comment }}</p>
+      </dd>
+    {% endfor %}
+    </dl>
 
-  <div id="modal-iframe-container" style="display: none;" title="Post a Comment">
-  </div>
+    <div id="modal-iframe-container" style="display: none;" title="Post a Comment">
+    </div>
 
-  <div>
-    <a id="post-a-comment" href="{% url blog.views.ajax_comment article.id %}">
-      Post a Comment
-    </a>
+    <div>
+      <a id="post-a-comment" href="{% url blog.views.ajax_comment article.id %}">
+        Post a Comment
+      </a>
+    </div>
   </div>
 {% endblock meat %}
