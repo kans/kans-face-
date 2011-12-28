@@ -12,6 +12,7 @@
       WSGIProcessGroup kans-face-$logQualifier
   </IfDefine>
 
+
   WSGIPassAuthorization On
   DocumentRoot $dir/apache
 

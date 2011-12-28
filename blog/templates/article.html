@@ -8,22 +8,23 @@
   <script type="text/javascript" src="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.min.js"></script>
   <script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
   <script type="text/javascript">
-    function show_dialog(){
-       $("#modal-iframe-container").html('<iframe id="modal-iframe" width="100%" height="100%" \
-                                        marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" />').dialog("open");
-       $("#modal-iframe").attr("src", "{% url blog.views.ajax_comment article.id %}");
-        return false;
-    }
-    $(document).ready(function(){
+
+  $(document).ready(function(){
       $("#modal-iframe-container").dialog({
                autoOpen: false,
                modal: true,
                height: 700,
                width: 500
-           });
+      });
 
-      $("#post-a-comment").click(show_dialog);
+      $("#post-a-comment").click(function(){
+          $("#modal-iframe-container").html('<iframe id="modal-iframe" width="100%" height="100%" \
+            marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" src="{% url blog.views.ajax_comment article.id %}" />').dialog("open");
+          return false;
+        });
     });
+
+
   </script>
 {% endblock %}
 

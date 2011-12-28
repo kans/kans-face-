@@ -36,8 +36,12 @@ def archives(request):
 
   return render_to_response("archives.html", {'dates': dates})
 
-@csrf_protect
+#@csrf_protect
 def ajax_comment(request, articleID):
+  if request.method == "POST":
+    from django.contrib.comments.views import comments
+    response = comments.post_comment(request, next=None, using=None)
+    return response
   article = get_object_or_404(models.Article, id=articleID, is_live=True)
   context = {}
   context.update(csrf(request))

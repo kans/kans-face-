@@ -1,13 +1,74 @@
 {% extends 'base.html' %}
 
 {% load comments %}
+{% load static %}
 
 {% block scripts %}
+{{ block.super }}
+<script type="text/javascript" src="{% get_static_prefix %}cache-long/jquery.form.js"></script>
+<script type="text/javascript">
 
-{% endblock %}
+  $(document).ready(function() {
+
+      $('body').ajaxComplete(function(event, xhr, settings) {
+        if (xhr.status == 278) {
+            parent.window.location.href = xhr.getResponseHeader("Location").replace(/\?.*$/, "");
+        }
+    });
+    $(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+                    // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                            // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
+
+      $('#comment-form').submit(function(){
+          $(this).ajaxSubmit({
+          success: function(response, status, request) {
+              $("#comment-form").html(response);
+          },
+          url: "{% comment_form_target %}",//{% url blog.views.ajax_comment article.id %}
+          type: "POST"}
+          );
+
+    return false;
+    })
+  });
+</script>
+{% endblock scripts %}
 
 {% block body %}
-<form action="{% comment_form_target %}" method="post" id="comment-form">
+<form action="{% url blog.views.lookup_article slug=article.slug %}" method="post" id="comment-form">
   <table>
   {% csrf_token %}
   {% get_comment_form for article as form %}
@@ -15,7 +76,6 @@
    <tr>
      <td colspan="2">
        <input type="submit" name="submit" value="Post">
-       <input type="submit" name="preview" value="Preview">
      </td>
    </tr>
   </table>
