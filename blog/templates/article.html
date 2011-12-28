@@ -46,8 +46,8 @@
   </div>
 
   <div>
-    <div id="post-a-comment">
+    <a id="post-a-comment" href="{% url blog.views.ajax_comment article.id %}">
       Post a Comment
-    </div>
+    </a>
   </div>
 {% endblock meat %}
