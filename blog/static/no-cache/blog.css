@@ -3,7 +3,9 @@ body{
     font-family: "PT Serif", "Serif";
     font-size: 1.2em;
 }
-
+i{
+    font-style:italic;
+}
 h3{
     font-size: 1.6em;
     padding: 20px 0;
@@ -40,8 +42,9 @@ dd{
     font-size: 1.1em;
     height: 1em;
     padding: 15px 0;
-    border-bottom: 1px solid;
-    border-top: 1px solid;
+    border: 2px solid;
+    border-left: none;
+    border-right: none;
 }
 #nav > ul{
     display: block;
@@ -63,8 +66,8 @@ dd{
     border-left: 1px dotted #333;
 }
 #nav a{
-    font-decoration: none;
-    color: #333;
+    text-decoration: none;
+    color: #000;
 }
 .content{
     width: 1200px;
@@ -74,13 +77,12 @@ dd{
     padding-right: 50px;
 }
 #sidebar{
-    width: 228px;
+    width: 226px;
     float: left;
     padding: 15px;
     padding-top: 0;
-    border: 1px solid;
+    border: 2px solid;
     border-top: 0;
-
 }
 #sidebar hr{
     margin: 15px -15px;
@@ -119,12 +121,9 @@ dd{
     cursor: pointer;
     display: inline;
 }
-a:link{
+a:link, a:visited, a:hover{
     text-decoration: underline;
-    color: #ff0000;
-}
-a:visited{
-    color: #ff0000;
+    color: #00009B;
 }
 #blog-post{
     padding-top: 15px;
@@ -144,4 +143,14 @@ a:visited{
 }
 pre.prettyprint{
     padding: 10px;
+    background: #EEEEEE;
+}
+.pun, .opn, .clo {
+    color: #000;
+}
+.kwd{
+    color: #00008B;
+}
+.str,.lit{
+    color: #700000;
 }
