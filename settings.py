@@ -76,7 +76,9 @@ TEMPLATE_LOADERS = (
 )
 
 MIDDLEWARE_CLASSES = (
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -155,6 +157,14 @@ CKEDITOR_CONFIGS = {
         'toolbarCanCollapse': True,
     }
 }
+
+CACHES = {
+  'default': {
+    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'LOCATION': 'unix:/%s/memcached/socket' % (ROOT_DIR),
+    'TIMEOUT': 60*60*24,
+    }
+  }
 from secretSettings import *
 
 # person to email... is there a djanog builtin to do this?

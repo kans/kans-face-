@@ -108,7 +108,7 @@ dd{
     border-top: 1px dotted #333;
 }
 #meat{
-    float: left;
+    float: right;
     width: 940px;
 }
 
@@ -131,7 +131,7 @@ a:link, a:visited, a:hover{
 }
 #blog-post{
     padding-top: 15px;
-    padding-right: 30px;
+    padding-left: 30px;
     font-size: 1.1em;
 }
 #blog-post h3:first-of-type{
