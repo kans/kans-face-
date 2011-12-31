@@ -1,17 +1,14 @@
 #!/usr/bin/python
 #Copyright 2011 Matt Kaniaris
 
-from django.template.loader import render_to_string
 from django.http import HttpResponse
 from django.core.cache import cache
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from blog import models
-
-def _filter_articles():
-  #pylint: disable = E1101
-  return models.Article.objects.filter(is_live=True).order_by('-updated_on')
+from blog.cache_control import update_recent_posts_cache
+from blog.utils import _filter_articles
 
 def lookup_article(request, slug):
   article = get_object_or_404(models.Article, slug=slug, is_live=True)
@@ -27,9 +24,7 @@ def get_recent_posts(request):
   response = cache.get(key, None)
   if response is not None:
     return HttpResponse(response)
-  recentPosts =  _filter_articles().values("slug", "title")[:5]
-  freshResponse = render_to_string('recent-posts.html', {'posts': recentPosts })
-  cache.set(key, freshResponse, 60*60*24*7)
+  freshResponse = update_recent_posts_cache()
   return HttpResponse(freshResponse)
 
 def splash(request):
