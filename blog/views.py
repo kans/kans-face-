@@ -1,7 +1,7 @@
 #!/usr/bin/python
 #Copyright 2011 Matt Kaniaris
 
-from django.template.loader import render_to_string
+from django.core.cache import cache
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
@@ -45,12 +45,8 @@ def archives(request):
 
   return render_to_response("archives.html", {'dates': dates})
 
-#@csrf_protect
 def ajax_comment(request, articleID):
-  if request.method == "POST":
-    from django.contrib.comments.views import comments
-    response = comments.post_comment(request, next=None, using=None)
-    return response
+  """ returns the comment-form in a whole webpage """
   article = get_object_or_404(models.Article, id=articleID, is_live=True)
   context = {}
   context.update(csrf(request))
