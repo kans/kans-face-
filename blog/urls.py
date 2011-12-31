@@ -11,5 +11,6 @@ urlpatterns = patterns('',
   (r'^$', views.splash),
   (r'^comments/', include('django.contrib.comments.urls')),
   (r'^make-comment/(\d*)', views.ajax_comment),
+  (r'^get-recent-posts', views.get_recent_posts),
    url(r'^post/(?P<slug>.*)$', views.lookup_article, name="lookup-article"),
 )

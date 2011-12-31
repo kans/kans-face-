@@ -1,0 +1,6 @@
+<ul>
+  {% for post in posts %}
+    <li><a href="{% url blog.views.lookup_article post.slug %}">{{ post.title|truncatewords:5 }}</a></li>
+  {% endfor %}
+</ul>
+

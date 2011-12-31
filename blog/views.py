@@ -1,10 +1,14 @@
 #!/usr/bin/python
 #Copyright 2011 Matt Kaniaris
 
+from django.template.loader import render_to_string
 from django.core.context_processors import csrf
 from django.template import RequestContext
 from django.shortcuts import get_object_or_404, render_to_response
 from blog import models
+
+def _filter_articles():
+  return models.Article.objects.filter(is_live=True).order_by('-updated_on')
 
 def lookup_article(request, slug):
   article = get_object_or_404(models.Article, slug=slug, is_live=True)
@@ -12,8 +16,12 @@ def lookup_article(request, slug):
   context['article'] = article
   return render_to_response("article.html", context)
 
+def get_recent_posts(request):
+  recentPosts =  _filter_articles().values("slug", "title")[:5]
+  return render_to_response('recent-posts.html', {'posts': recentPosts })
+
 def splash(request):
-  articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'updated_on')
+  articles = _filter_articles().values('slug', 'created_on', 'updated_on')
   return render_to_response("blog-index.html", {'articles': articles})
 
 class _article(object):
@@ -27,7 +35,7 @@ class _article(object):
 def archives(request):
   """ returns a page renderning links to all posts ever """
   # its easier to maintain some app level sql sorting than making a monster query I think?
-  articles = models.Article.objects.filter(is_live=True).order_by('-created_on').values('slug', 'created_on', 'title')
+  articles = _filter_articles().values('slug', 'created_on', 'title')
   dates = {}
   for article in articles:
     time = article['created_on']

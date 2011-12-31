@@ -11,12 +11,22 @@
 
   <h2>recent stuffs</h2>
 
-  {% recent_stuffs 5 as stuffs %}
-  <ul>
-    {% for stuff in stuffs %}
-      <li><a href="{{ stuff.url }}">{{ stuff.title|truncatewords:5 }}</a></li>
-    {% endfor %}
-  </ul>
+
+  <div id="recent-posts">
+    <script type="text/javascript">
+      $(document).ready(function(){
+          $.ajax({
+            url: "{% url blog.views.get_recent_posts %}",
+            success: function(data, textStatus, jqXHR){
+              $("#recent-no-script").replaceWith(data);
+            },
+          });
+       });
+    </script>
+    <noscript id="recent-no-script">
+      Enable javscript to see these!
+    </noscript>
+  </div>
 
   <hr/>
 
