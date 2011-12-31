@@ -1,6 +1,8 @@
 #!/usr/bin/python
 #Copyright 2011 Matt Kaniaris
 
+from django.template.loader import render_to_string
+from django.http import HttpResponse
 from django.core.cache import cache
 from django.core.context_processors import csrf
 from django.template import RequestContext
@@ -8,6 +10,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from blog import models
 
 def _filter_articles():
+  #pylint: disable = E1101
   return models.Article.objects.filter(is_live=True).order_by('-updated_on')
 
 def lookup_article(request, slug):
@@ -17,8 +20,17 @@ def lookup_article(request, slug):
   return render_to_response("article.html", context)
 
 def get_recent_posts(request):
+  """ returns the rendered list of links to posts as a ul """
+  # is this a good idea?
+  key = request.path
+  # should make a wrapper to do this that takes the key and time
+  response = cache.get(key, None)
+  if response is not None:
+    return HttpResponse(response)
   recentPosts =  _filter_articles().values("slug", "title")[:5]
-  return render_to_response('recent-posts.html', {'posts': recentPosts })
+  freshResponse = render_to_string('recent-posts.html', {'posts': recentPosts })
+  cache.set(key, freshResponse, 60*60*24*7)
+  return HttpResponse(freshResponse)
 
 def splash(request):
   articles = _filter_articles().values('slug', 'created_on', 'updated_on')
@@ -30,6 +42,7 @@ class _article(object):
       setattr(self, key, value)
 
   def time(self):
+    #pylint: disable = E1101
     return self.created_on.strftime('%b %d')
 
 def archives(request):
