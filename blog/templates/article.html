@@ -49,9 +49,9 @@
 
 {% block meat %}
   <div id="blog-post">
-    <h4>created on: {{ article.created_on }} | edited on: {{ article.updated_on }}</h4>
-    <h3> {{ article.title|safe }}</h3>
 
+    <h3> {{ article.title|safe }}</h3>
+    <h4>created on: {{ article.created_on }} | edited on: {{ article.updated_on }}</h4>
     {{ article.body|safe }}
 
     <h4>last edited on: {{ article.updated_on }}</h4>
