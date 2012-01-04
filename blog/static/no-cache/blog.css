@@ -41,7 +41,6 @@ dd{
     font-size: .9em;
     margin: 0;
     font-style: italic;
-    text-align: right;
     padding: 5px 15px;
     border-top: 1px dotted;
     border-bottom: 0 none;
@@ -150,6 +149,12 @@ a:link, a:visited, a:hover{
     font-size: 3em;
     text-align: justify;
     font-weight: bold;
+}
+#blog-post h4{
+    font-size: .9em;
+    color: #999;
+    font-style: italic;
+    padding: 5px 0;
 }
 #blog-post p{
     padding: 10px 0;
