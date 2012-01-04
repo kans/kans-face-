@@ -1,18 +1,24 @@
 {% load recent_posts %}
 
 <div id="sidebar">
-  <h3>hewro, I'm matt</h3>
-  <p>
-    I've written this stuff, some of which may be marginally helpful or informative.
-    You may also want to check out <a href="http://www.cloudfab.com">Cloudfab</a>, which I helped to build.
-  </p>
+  <div id="header">
+    <h1>kansface</h1>
+    <h2> matt kaniaris's face on programming, language, food, and stuff </h2>
+  </div>
 
-  <hr/>
+  <div class="sidebar-item">
+    <h2>aboot</h2>
+    <p>
+      I've written this stuff, some of which may even be marginally helpful or informative.
+      You may also want to check out <a href="http://www.cloudfab.com">Cloudfab</a>, which I helped to build.
+    </p>
+  </div>
 
-  <h2>recent stuffs</h2>
 
-
-  <div id="recent-posts">
+  <div class="sidebar-item">
+    <h2>recent stuffs</h2>
+    <p id="recent-posts">
+    </p>
     <script type="text/javascript">
       $(document).ready(function(){
           $.ajax({
@@ -28,22 +34,22 @@
     </noscript>
   </div>
 
-  <hr/>
-
-  <h2>github</h2>
-
-  <ul>
-    <li>
-      <a href="https://github.com/kans/kans-face-">blog</a>
-      <br/>
-      the blog (software) itself
-    </li>
-    <li>
-      <a href="https://github.com/kans/BitBlinder">BitBlinder</a>
-      <br/>
-      defunct anonymizing network
-    </li>
-  </ul>
-
+  <div class="sidebar-item">
+    <h2>github</h2>
+    <p>
+      <ul>
+        <li>
+          <a href="https://github.com/kans/kans-face-">blog</a>
+          <br/>
+          the blog (software) itself
+        </li>
+        <li>
+          <a href="https://github.com/kans/BitBlinder">BitBlinder</a>
+          <br/>
+          defunct anonymizing network
+        </li>
+      </ul>
+    </p>
+  </div>
 
 </div>

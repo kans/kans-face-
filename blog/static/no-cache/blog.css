@@ -37,11 +37,16 @@ dd{
 #header > h1{
     font-size: 2.2em;
 }
-#header > h2{
-    font-size: 1.2em;
-    padding: 0;
+#header h2{
+    font-size: .9em;
     margin: 0;
+    font-style: italic;
+    text-align: right;
+    padding: 5px 15px;
+    border-top: 1px dotted;
+    border-bottom: 0 none;
 }
+
 #nav{
     font-size: 1.1em;
     height: 1em;
@@ -83,16 +88,21 @@ dd{
 #sidebar{
     width: 226px;
     float: left;
-    padding: 15px;
-    padding-top: 0;
-    border: 2px solid;
-    border-top: 0;
+    padding: 0 25px 0 0;
+    padding-top: 0px;
+    margin-top: 50px;
+    border-right: 1px dotted;
 }
-#sidebar hr{
-    margin: 15px -15px;
+.sidebar-item {
+    padding: 15px 0 30px 15px;
 }
-#sidebar p:first-of-type{
-    text-align: justify;
+.sidebar-item > h2{
+    font-weight: bold;
+    font-size: 1.1em;
+    border-bottom: 1px dotted;
+}
+.sidebar-item > p{
+    padding-top: 10px;
 }
 #sidebar > ul{
     display: block;
@@ -127,16 +137,18 @@ dd{
 }
 a:link, a:visited, a:hover{
     text-decoration: underline;
-    color: #00009B;
+    color: #F00;
 }
 #blog-post{
-    padding-top: 15px;
-    padding-left: 30px;
+    padding-top: 50px;
+    padding-left: 50px;
+    padding-bottom: 100px;
     font-size: 1.1em;
 }
 #blog-post h3:first-of-type{
     padding: 20px 0;
-    font-size: 2em;
+    font-size: 3em;
+    text-align: justify;
     font-weight: bold;
 }
 #blog-post p{

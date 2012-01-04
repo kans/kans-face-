@@ -23,15 +23,3 @@ class Article(baseModels.BaseModel):
 
   class Meta:
     app_label = 'blog'
-
-  @staticmethod
-  def post_save(sender, instance, **kwargs):
-    """Don't fail silently or do clobber a test.
-    Note, we can't use a unique constraint because we want to allow any number of inactive tests with a shared goal"""
-
-    sharedGoals = ABTest.objects.filter(goal=instance.goal, active=True)
-    if sharedGoals:
-      raise ValueError("We can't tell these tests apart: %s: %s and the one you tried to create. Set the old one to inactive or change the goal of this one." % (sharedGoals[0].name, sharedGoals[0].id))
-
-
-post_save.connect(Article.post_save, sender=Article)
