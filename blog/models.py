@@ -13,6 +13,12 @@ class Article(baseModels.BaseModel):
   slug = models.TextField(help_text="Article slug")
   is_live = models.BooleanField(help_text="Is this article visible to the public?", default=False)
 
+  @staticmethod
+  def filter_live(**kwargs):
+    """ I got tired of writing this everywhere """
+    #pylint: disable = E1101
+    return Article.objects.filter(is_live=True, **kwargs).order_by('-updated_on')
+
   @models.permalink
   def get_absolute_url(self):
     return ('lookup-article', (), {'slug': self.slug})
@@ -23,3 +29,4 @@ class Article(baseModels.BaseModel):
 
   class Meta:
     app_label = 'blog'
+

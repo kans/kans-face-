@@ -119,6 +119,7 @@ dd{
 #meat{
     float: right;
     width: 940px;
+    padding-top: 75px;
 }
 
 #comment-form table{
@@ -139,13 +140,13 @@ a:link, a:visited, a:hover{
     color: #F00;
 }
 #blog-post{
-    padding-top: 50px;
+    padding-top: 0px;
     padding-left: 50px;
     padding-bottom: 100px;
     font-size: 1.1em;
 }
 #blog-post h3:first-of-type{
-    padding: 25px 0 35px 0;
+    padding: 0px 0 35px 0;
     font-size: 3em;
     font-weight: bold;
     text-align: center;
@@ -155,6 +156,9 @@ a:link, a:visited, a:hover{
     color: #999;
     font-style: italic;
     padding: 5px 0;
+}
+.blog-year > h2{
+
 }
 #blog-post p{
     padding: 10px 0;
