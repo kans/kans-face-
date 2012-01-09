@@ -5,47 +5,23 @@
 
 import django.http
 import django.core.cache
+cache = django.core.cache.cache
 import django.core.urlresolvers
 import django.core.context_processors
 import django.template
 import django.template.loader
 import django.shortcuts
 import django.dispatch
+import django.views.decorators.cache
+import django.db.models.signals
 
 import blog.models
-import blog.cache_control
-
-from django.db.models.signals import post_save
-
-SPLASH_PAGE_KEY = 'SPLASH.KEY.HTML'
-SPLASH_SLUG = 'SPLASH.SLUG'
-
-
 
 def render_article(request, slug):
   article = django.shortcuts.get_object_or_404(blog.models.Article, slug=slug, is_live=True)
   context = django.template.RequestContext(request)
   context['article'] = article
   return django.template.loader.render_to_string("article.html", context)
-
-def update_recent_posts_cache():
-  recentPosts =  blog.models.Article.filter_live().values("slug", "title")[:5]
-  response = django.template.loader.render_to_string('recent-posts.html', {'posts': recentPosts })
-  key = django.core.urlresolvers.reverse('blog.views.get_recent_posts')
-  django.core.cache.cache.set(key, response, 60*60*24*7)
-  return response
-
-@django.dispatch.receiver(post_save, sender=blog.models.Article)
-def recent_posts_receiever(sender, **kwargs):
-  """ simple receiver to update our cache for recent posts after any article
-  has been saved.  We will update a bit too frequently, but how often
-  do you write blog articles?"""
-
-  instance = kwargs['instance']
-  key = django.core.urlresolvers.reverse(lookup_article, instance.slug)
-  fakeRequest = django.http.HttpRequest()
-  articleHTML = render_article(fakeRequest, instance.slug)
-  django.core.cache.cache.set(key, articleHTML, 60*60*24*7)
 
 def lookup_article(request, slug):
   """ returns a blog article
@@ -58,25 +34,32 @@ def lookup_article(request, slug):
   useCache = request.user.is_anonymous()
   if useCache:
     key = request.path
-    response = django.core.cache.cache.get(key, None)
+    response = cache.get(key, None)
     if response is not None:
       return django.http.HttpResponse(response)
 
   response = render_article(request, slug)
   if useCache:
-    django.core.cache.cache.set(key, response, 60*60*24*7)
+    cache.set(key, response, 60*60*24*7)
   return django.http.HttpResponse(response)
 
+@django.dispatch.receiver(django.db.models.signals.post_save, sender=blog.models.Article)
+def recent_posts_receiever(sender, **kwargs):
+  """ simple receiver to update our cache for recent posts after any article
+  has been saved.  We will update a bit too frequently, but how often
+  do you write blog articles?"""
+  instance = kwargs['instance']
+  key = django.core.urlresolvers.reverse(lookup_article, kwargs={'slug':instance.slug})
+  fakeRequest = django.http.HttpRequest()
+  articleHTML = render_article(fakeRequest, instance.slug)
+  cache.set(key, articleHTML, 60*60*24*7)
+
+@django.views.decorators.cache.cache_control(max_age=60*5)
 def get_recent_posts(request):
   """ returns the rendered list of links to posts as a ul """
-  # is this a good idea?
-  key = request.path
-  # should make a wrapper to do this that takes the key and time
-  response = django.core.cache.cache.get(key, None)
-  if response is not None:
-    return django.http.HttpResponse(response)
-  freshResponse = blog.cache_control.update_recent_posts_cache()
-  return django.http.HttpResponse(freshResponse)
+  recentPosts =  blog.models.Article.filter_live().values("slug", "title")[:5]
+  response = django.template.loader.render_to_string('recent-posts.html', {'posts': recentPosts })
+  return django.http.HttpResponse(response)
 
 def splash(request):
   response = django.core.cache.cache.get('splash.html', None)

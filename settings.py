@@ -160,7 +160,7 @@ CKEDITOR_CONFIGS = {
 
 CACHES = {
   'default': {
-    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+    'BACKEND': 'newcache.CacheClass',
     'LOCATION': 'unix:/%s/memcached/socket' % (ROOT_DIR),
     'TIMEOUT': 60*60*24,
     }
