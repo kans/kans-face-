@@ -2,17 +2,24 @@
 #Copyright 2011 Matt Kaniaris
 """ handles updating some cached objects/renderings after we receive the appropriate signals"""
 
-from django.template.loader import render_to_string
+
 from django.db.models.signals import post_save
 from django.core.urlresolvers import reverse
 from django.core.cache import cache
 from django.dispatch import receiver
 
-from blog import utils
 from blog import models
 
-SPLASH_PAGE_KEY = 'SPLASH.KEY.HTML'
-SPLASH_SLUG = 'SPLASH.SLUG'
+#: the time left before the timeout when we consider the object stale
+CACHE_EPSILON_TIMEOUT = 60
+
+def cache_control(f):
+  def wrapper(request, *args, **kwargs):
+    # don't cache stuff for logged in users
+    if not request.user.is_anonymous():
+      return f(request, *args, **kwargs)
+
+
 
 def update_recent_posts_cache():
   recentPosts =  models.Article.filter_live().values("slug", "title")[:5]

@@ -41,41 +41,9 @@ dd{
     font-size: .9em;
     margin: 0;
     font-style: italic;
-    padding: 5px 15px;
-    border-top: 1px dotted;
+    padding: 5px 0;
+    border-top: 1px solid;
     border-bottom: 0 none;
-}
-
-#nav{
-    font-size: 1.1em;
-    height: 1em;
-    padding: 15px 0;
-    border: 2px solid;
-    border-left: none;
-    border-right: none;
-}
-#nav > ul{
-    display: block;
-    border: 0 none;
-    margin-left: 0;
-    padding-left: 0;
-}
-#nav > ul > li{
-    display: inline;
-    float: left;
-    margin-left: 1em;
-    padding-left: 1em;
-}
-#nav > ul > li:first-child{
-    margin: 0;
-    padding-left: 0;
-}
-#nav > ul > li + li {
-    border-left: 1px dotted #333;
-}
-#nav a{
-    text-decoration: none;
-    color: #000;
 }
 .content{
     width: 1200px;
@@ -85,20 +53,21 @@ dd{
     padding-right: 50px;
 }
 #sidebar{
-    width: 226px;
-    float: left;
-    padding: 0 25px 0 0;
-    padding-top: 0px;
+    width: 209px;
+    float: right;
+    padding: 0 0 0 25px;
     margin-top: 50px;
-    border-right: 1px dotted;
+    margin-left: 25px;
+    border-left: 1px solid;
 }
 .sidebar-item {
-    padding: 15px 0 30px 15px;
+    padding: 15px 0 30px 0px;
 }
 .sidebar-item > h2{
     font-weight: bold;
     font-size: 1.1em;
-    border-bottom: 1px dotted;
+    padding-bottom: 0px;
+    border-bottom: 1px solid;
 }
 .sidebar-item > p{
     padding-top: 10px;
@@ -117,11 +86,10 @@ dd{
     border-top: 1px dotted #333;
 }
 #meat{
-    float: right;
+    float: left;
     width: 940px;
     padding-top: 75px;
 }
-
 #comment-form table{
     text-align: left;
 }

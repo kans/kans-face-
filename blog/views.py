@@ -5,18 +5,67 @@
 
 import django.http
 import django.core.cache
+import django.core.urlresolvers
 import django.core.context_processors
 import django.template
+import django.template.loader
 import django.shortcuts
+import django.dispatch
 
 import blog.models
 import blog.cache_control
 
-def lookup_article(request, slug):
+from django.db.models.signals import post_save
+
+SPLASH_PAGE_KEY = 'SPLASH.KEY.HTML'
+SPLASH_SLUG = 'SPLASH.SLUG'
+
+
+
+def render_article(request, slug):
   article = django.shortcuts.get_object_or_404(blog.models.Article, slug=slug, is_live=True)
   context = django.template.RequestContext(request)
   context['article'] = article
-  return django.shortcuts.render_to_response("article.html", context)
+  return django.template.loader.render_to_string("article.html", context)
+
+def update_recent_posts_cache():
+  recentPosts =  blog.models.Article.filter_live().values("slug", "title")[:5]
+  response = django.template.loader.render_to_string('recent-posts.html', {'posts': recentPosts })
+  key = django.core.urlresolvers.reverse('blog.views.get_recent_posts')
+  django.core.cache.cache.set(key, response, 60*60*24*7)
+  return response
+
+@django.dispatch.receiver(post_save, sender=blog.models.Article)
+def recent_posts_receiever(sender, **kwargs):
+  """ simple receiver to update our cache for recent posts after any article
+  has been saved.  We will update a bit too frequently, but how often
+  do you write blog articles?"""
+
+  instance = kwargs['instance']
+  key = django.core.urlresolvers.reverse(lookup_article, instance.slug)
+  fakeRequest = django.http.HttpRequest()
+  articleHTML = render_article(fakeRequest, instance.slug)
+  django.core.cache.cache.set(key, articleHTML, 60*60*24*7)
+
+def lookup_article(request, slug):
+  """ returns a blog article
+  NOTE: we accept sprinkling cache stuff in this view and this view only because
+  it is so easy to do so in this case since there is no need to worry about
+  everything it touches.  This is probably a premature optimization and caching this page could
+  be handled using the timeout method employed elsewhere."""
+
+  #try cache first if anon
+  useCache = request.user.is_anonymous()
+  if useCache:
+    key = request.path
+    response = django.core.cache.cache.get(key, None)
+    if response is not None:
+      return django.http.HttpResponse(response)
+
+  response = render_article(request, slug)
+  if useCache:
+    django.core.cache.cache.set(key, response, 60*60*24*7)
+  return django.http.HttpResponse(response)
 
 def get_recent_posts(request):
   """ returns the rendered list of links to posts as a ul """
