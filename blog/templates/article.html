@@ -7,7 +7,6 @@
   <link rel="stylesheet" href="{% get_static_prefix %}cache-long/google-code-prettify/prettify.css" type="text/css" />
   {{ block.super }}
   <link rel="stylesheet" href="{% get_static_prefix %}cache-long/ui/jquery-ui-1.8.16.custom.css" type="text/css" />
-
 {% endblock %}
 
 {% block scripts %}
@@ -33,12 +32,12 @@
                autoOpen: false,
                modal: true,
                height: 500,
-               width: 800
+               width: 800,
       });
 
       $("#post-a-comment").click(function(){
           $("#modal-iframe-container").html('<iframe id="modal-iframe" width="100%" height="100%" \
-            marginWidth="0" marginHeight="0" frameBorder="0" scrolling="auto" src="{% url blog.views.ajax_comment article.id %}" />').dialog("open");
+            marginWidth="0" marginHeight="0" frameBorder="0" src="{% url blog.views.ajax_comment article.id %}" />').dialog("open");
           return false;
         });
     });
@@ -75,7 +74,7 @@
     {% endfor %}
     </dl>
 
-    <div id="modal-iframe-container" style="display: none;" title="Post a Comment">
+    <div id="modal-iframe-container" style="display: none; overflow: hidden;" title="Post a Comment">
     </div>
 
     <div>

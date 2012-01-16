@@ -24,6 +24,7 @@ def render_article(request, slug):
   context['article'] = article
   return django.template.loader.render_to_string("article.html", context)
 
+@django.views.decorators.cache.never_cache
 def lookup_article(request, slug):
   """ returns a blog article
   NOTE: we accept sprinkling cache stuff in this view and this view only because
@@ -69,6 +70,7 @@ def get_recent_posts(request):
   response = django.template.loader.render_to_string('recent-posts.html', {'posts': recentPosts })
   return django.http.HttpResponse(response)
 
+@django.views.decorators.cache.never_cache
 def splash(request):
   """ handles caching of the splash page"""
   response = cache.get('splash.html', None)
@@ -104,6 +106,7 @@ def archives(request):
 
   return django.shortcuts.render_to_response("archives.html", {'dates': dates})
 
+@django.views.decorators.cache.never_cache
 def ajax_comment(request, articleID):
   """ returns the comment-form in a whole webpage """
   article = django.shortcuts.get_object_or_404(blog.models.Article, id=articleID, is_live=True)
@@ -111,5 +114,3 @@ def ajax_comment(request, articleID):
   context.update(django.core.context_processors.csrf(request))
   context.update(article=article)
   return django.shortcuts.render_to_response("comment-form.html", context)
-
-

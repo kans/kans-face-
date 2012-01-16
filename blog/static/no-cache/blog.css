@@ -33,7 +33,9 @@ dd{
     margin: 10px 0;
     padding-left: 10px;
 }
-
+.hide{
+    display: none;
+}
 #header{
     padding: 20px 0;
 }
@@ -141,3 +143,6 @@ pre.prettyprint{
 .str,.lit{
     color: #700000;
 }
+.error{
+    color: #ff000;
+    }

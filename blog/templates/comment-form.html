@@ -3,6 +3,33 @@
 {% load comments %}
 {% load static %}
 
+{% block styles %}
+  {{ block.super }}
+
+<style type="text/css">
+table{
+  width: 750px;
+}
+input[type="text"], textarea {
+  width: 250px;
+  padding: 5px;
+}
+textarea{
+  width: 500px;
+}
+tbody, tr{
+  width: 100%;
+}
+td{
+  vertical-align: top;
+  padding: 5px;
+}
+.ui-dialog, .ui-dialog-content{
+  overflow: hidden;
+}
+</style>
+{% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 <script type="text/javascript" src="{% get_static_prefix %}cache-long/jquery.form.js"></script>
@@ -68,17 +95,50 @@
 {% endblock scripts %}
 
 {% block body %}
-<form action="{% url blog.views.lookup_article slug=article.slug %}" method="post" id="comment-form">
-  <table>
-  {% csrf_token %}
-  {% get_comment_form for article as form %}
-  {{ form.as_table }}
-   <tr>
-     <td colspan="2">
-       <input type="submit" name="submit" value="Post">
-     </td>
-   </tr>
+
+{% get_comment_form for article as form %}
+<form action="{% comment_form_target %}" method="post" id="comment-form">
+  <table width="100%">
+    {% if form.non_field_errors %}
+      <tr class='error'>
+        <td><i>There was an error:</i></td>
+        <td>{{ form.non_field_errors }}<span id="__failure_tag_non_field_errors"></span></td>
+      </tr>
+    {% endif %}
+
+    {% for field in form.visible_fields %}
+      {% if field.errors %}
+        <tr class='error'>
+          {% if field.help_text %}
+            <td colspan="1"><i>error:</i></td>
+          {% else %}
+            <td><i>error:</i></td>
+          {% endif %}
+          <td>{{ field.errors }}<span id="__failure_tag_{{field.html_name}}"></span></td>
+        </tr>
+      {% endif %}
+
+      <tr class='titleRow {% if field.name == "honeypot" %}hide{% endif %}'>
+        <td><label for="{{ field.html_name }}" class="fieldLabel">{{ field.label }}{% if not form.ignore_required_prompt %}{% if field.field.required %}*{%endif%}{%endif%}</label></td>
+        <td>{{ field }}</td>
+      </tr>
+    {% endfor %}
+
+    {% for hidden in form.hidden_fields %}
+      {{ hidden }}
+    {% endfor %}
+
+    {% csrf_token %}
+
+    <tr>
+      <td colspan="2">
+        <input type="submit" name="submit" value="Post">
+      </td>
+    </tr>
   </table>
+
+  <p style="float: left; width: 100%;"><b>*</b> = field is required.
+
   <input type="hidden" name="next" value="{% url blog.views.lookup_article slug=article.slug %}" />
 
  </form>
