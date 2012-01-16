@@ -16,6 +16,7 @@ import django.views.decorators.cache
 import django.db.models.signals
 
 import blog.models
+import blog.utils
 
 def render_article(request, slug):
   article = django.shortcuts.get_object_or_404(blog.models.Article, slug=slug, is_live=True)
@@ -26,7 +27,7 @@ def render_article(request, slug):
 def lookup_article(request, slug):
   """ returns a blog article
   NOTE: we accept sprinkling cache stuff in this view and this view only because
-  it is so easy to do so in this case since there is no need to worry about
+  it is so easy to do in this case because there is no need to worry about
   everything it touches.  This is probably a premature optimization and caching this page could
   be handled using the timeout method employed elsewhere."""
 
@@ -42,6 +43,13 @@ def lookup_article(request, slug):
   if useCache:
     cache.set(key, response, 60*60*24*7)
   return django.http.HttpResponse(response)
+
+@django.dispatch.receiver(django.contrib.comments.signals.comment_was_flagged)
+@django.dispatch.receiver(django.contrib.comments.signals.comment_was_posted)
+def recent_comment_receiver(sender, comment, request, **kwargs):
+  """ handles updating the cache when we get a new comment """
+  modelInstance = comment.content_object
+  django.db.models.signals.post_save.send(sender=blog.models.Article, instance=modelInstance)
 
 @django.dispatch.receiver(django.db.models.signals.post_save, sender=blog.models.Article)
 def recent_posts_receiever(sender, **kwargs):
@@ -62,10 +70,11 @@ def get_recent_posts(request):
   return django.http.HttpResponse(response)
 
 def splash(request):
-  response = django.core.cache.cache.get('splash.html', None)
+  """ handles caching of the splash page"""
+  response = cache.get('splash.html', None)
   if response is not None:
     return django.http.HttpResponse(response)
-  slug = django.core.cache.cache.get('splash.slug', None)
+  slug = cache.get('splash.slug', None)
   if slug is not None:
     return lookup_article(request, slug)
   articles = blog.models.Article.filter_live().values('slug')
