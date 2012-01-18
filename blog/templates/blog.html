@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block scripts %}
   {{ block.super }}
   <script type="text/javascript">
@@ -19,6 +21,12 @@
     <div id="header">
       <h1>kan's face:</h1>
       <h2> matt kaniaris's face on programming, language, food, and stuff.</h2>
+    </div>
+    <div class="sidebar-item">
+      <h2>feeds:</h2>
+      <p>
+        <img style="width: 17px; vertical-align: bottom;" src="{% get_static_prefix %}cache-long/feed.svg"/> <a href="{% url feeder %}">last post</a>
+      </p>
     </div>
     <div class="sidebar-item">
       <h2>aboot:</h2>

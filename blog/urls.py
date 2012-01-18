@@ -7,6 +7,7 @@ from blog import views
 
 urlpatterns = patterns('',
   (r'^ckeditor/', include('ckeditor.urls')),
+  url(r'^feed$', views.Feeder(), name="feeder"),
   (r'^archives$', views.archives),
   (r'^$', views.splash),
   (r'^comments/', include('django.contrib.comments.urls')),

@@ -14,9 +14,25 @@ import django.shortcuts
 import django.dispatch
 import django.views.decorators.cache
 import django.db.models.signals
+import django.contrib.syndication.views
 
 import blog.models
 import blog.utils
+
+
+class Feeder(django.contrib.syndication.views.Feed):
+  """ Handles rss feed """
+  title = "kan'sface latest"
+  link = ""
+
+  def items(self):
+    return blog.models.Article.filter_live()[0:1]
+
+  def item_title(self, article):
+    return article.title
+
+  def item_description(self, article):
+    return article.slug
 
 def render_article(request, slug):
   article = django.shortcuts.get_object_or_404(blog.models.Article, slug=slug, is_live=True)
@@ -58,6 +74,9 @@ def recent_posts_receiever(sender, **kwargs):
   has been saved.  We will update a bit too frequently, but how often
   do you write blog articles?"""
   instance = kwargs['instance']
+  #NOTE: Temporary hack since render_article raises a 404 if the article isn't live
+  if not instance.is_live:
+    return
   key = django.core.urlresolvers.reverse(lookup_article, kwargs={'slug':instance.slug})
   fakeRequest = django.http.HttpRequest()
   articleHTML = render_article(fakeRequest, instance.slug)
